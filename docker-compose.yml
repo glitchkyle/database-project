@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  api-server:
+    build: .
+    container_name: data-dynamo-api-server
+    image: data-dynamo-api-server
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - graph-database
+  graph-database:
+    container_name: neo4j-graph-database
+    image: neo4j
+    restart: always
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - NEO4J_AUTH=neo4j/neo4jadminpassword
+      - NEO4J_server_https_advertised__address=localhost:7473
+      - NEO4J_server_http_advertised__address=localhost:7474
+      - NEO4J_server_bolt_advertised__address=localhost:7687

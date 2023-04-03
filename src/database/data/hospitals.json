@@ -1,0 +1,14 @@
+[
+    {
+        "hospital_id": 2,
+        "patient_name": "Maryellen Roth",
+        "patient_mrn": "d59dd570-6086-40c7-9f51-977ea22955a7",
+        "patient_status": 2
+    },
+    {
+        "hospital_id": 4,
+        "patient_name": "Rich Fry",
+        "patient_mrn": "768009eb-e391-4940-b603-425751e0d5d7",
+        "patient_status": 3
+    }
+]
