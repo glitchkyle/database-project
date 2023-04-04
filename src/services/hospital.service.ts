@@ -1,8 +1,10 @@
 import { Hospitals, HospitalsInstance } from "../models/hospital.model";
 import {
     IHospital,
+    ITest,
     IVaccination,
     transformHospitalData,
+    transformTestData,
     transformVaccinationData,
 } from "../types/incoming.type";
 import { ErrorResponse } from "../utils/errorResponse";
@@ -198,6 +200,38 @@ export async function createManyHospitalData(
     const createDatas = hospitals.map((hospitalObj) =>
         transformHospitalData(hospitalObj)
     );
+
+    try {
+        const hospitals = await Hospitals.createMany(createDatas, {
+            merge: true,
+            validate: true,
+        });
+        return hospitals;
+    } catch (e) {
+        throw e;
+    }
+}
+
+export async function createOneTestData(
+    testObj: ITest
+): Promise<HospitalsInstance> {
+    const createData = transformTestData(testObj);
+
+    try {
+        const hospital = await Hospitals.createOne(createData, {
+            merge: true,
+            validate: true,
+        });
+        return hospital;
+    } catch (e) {
+        throw e;
+    }
+}
+
+export async function createManyTestData(
+    tests: ITest[]
+): Promise<HospitalsInstance[]> {
+    const createDatas = tests.map((testObj) => transformTestData(testObj));
 
     try {
         const hospitals = await Hospitals.createMany(createDatas, {

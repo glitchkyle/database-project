@@ -1,4 +1,4 @@
-import { ModelFactory, NeogmaInstance, ModelRelatedNodesI } from "neogma";
+import { ModelFactory, NeogmaInstance } from "neogma";
 import { neogma } from "../app";
 
 export type EventsPropertiesI = {

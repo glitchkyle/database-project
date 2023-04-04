@@ -1,10 +1,10 @@
 import fs from "fs";
 
-import { Events, EventsInstance } from "../models/event.model";
-import { Patients, PatientsPropertiesI } from "../models/patient.model";
-import { Hospitals, HospitalsPropertiesI } from "../models/hospital.model";
+import { Events } from "../models/event.model";
+import { Patients } from "../models/patient.model";
 import {
     createManyHospitalData,
+    createManyTestData,
     createManyVaccinationData,
 } from "../services/hospital.service";
 import { IHospital, ITest, IVaccination } from "../types/incoming.type";
@@ -15,8 +15,6 @@ export const initializeModels = async () => {
     Events.addRelationships({
         Attendee: Patients.reverseRelationshipConfiguration("AttendedEvent"),
     });
-
-    // TODO: Consider adding bidirection for hospital-patient relationship
 
     console.log("Database: Finished initializing");
 };
@@ -33,19 +31,31 @@ export const populateData = async () => {
     ) as ITest[];
 
     const hospitals = JSON.parse(
-        fs.readFileSync(`${__dirname}/data/tests.json`, "utf-8")
+        fs.readFileSync(`${__dirname}/data/hospitals.json`, "utf-8")
     ) as IHospital[];
 
     try {
+        console.log("Seeding Vaccination Data");
         await createManyVaccinationData(vaccinations);
+        console.log("Finished Seeding Vaccination Data");
     } catch (e) {
         console.log(`Vaccination Data Seeding Error: ${e}`);
     }
 
     try {
+        console.log("Seeding Hospital Data");
         await createManyHospitalData(hospitals);
+        console.log("Finished Seeding Hospital Data");
     } catch (e) {
         console.log(`Hospital Data Seeding Error: ${e}`);
+    }
+
+    try {
+        console.log("Seeding Test Data");
+        await createManyTestData(tests);
+        console.log("Finished Seeding Test Data");
+    } catch (e) {
+        console.log(`Testing Data Seeding Error: ${e}`);
     }
 
     console.log("Database: Finished populating");

@@ -4,7 +4,7 @@ import { Events, EventsInstance } from "./event.model";
 
 // Defines what properties each Patient node has.
 export type PatientsPropertiesI = {
-    name: string;
+    name: string | undefined;
     mrn: string;
     zipcode: number | undefined;
 };
@@ -35,10 +35,10 @@ export const Patients = ModelFactory<
             name: {
                 type: "string",
                 minLength: 1,
-                required: true,
+                required: false,
             },
             mrn: { type: "string", minLength: 1, required: true },
-            zipcode: { type: "number", minLength: 0, required: false },
+            zipcode: { type: "number", minimum: 0, required: false },
         },
         relationships: {
             AttendedEvent: {
