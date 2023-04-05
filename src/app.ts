@@ -29,6 +29,10 @@ export const queryRunner = new QueryRunner({
 import { NODE_ENV, SERVER_PORT } from "./config/config";
 import { getTeam, resetDatabase } from "./controllers/management.controller";
 import { initializeModels, populateData } from "./database/db";
+import {
+    getEventContactList,
+    getPatientContactList,
+} from "./controllers/tracing.controller";
 
 const main = async () => {
     const app = express();
@@ -55,12 +59,17 @@ const main = async () => {
 
     await initializeModels();
 
-    await populateData();
+    // await populateData();
 
     // Mount Routers
 
+    // Management Functions
     app.route("/api/getteam").get(getTeam);
     app.route("/api/reset").get(resetDatabase);
+
+    // Contact Tracing
+    app.route("/api/getconfirmedcontacts/:mrn").get(getPatientContactList);
+    app.route("/api/getpossiblecontacts/:mrn").get(getEventContactList);
 
     // Health Check Route
     app.get("/ping", (req: Request, res: Response, next: NextFunction) => {

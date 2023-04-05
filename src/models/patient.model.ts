@@ -50,12 +50,7 @@ export const Patients = ModelFactory<
                 model: "self",
                 direction: "out",
                 name: "CONTACTED",
-            },
-            ContactedByPatient: {
-                model: "self",
-                direction: "in",
-                name: "CONTACTED_BY",
-            },
+            }
         },
     },
     neogma
