@@ -75,6 +75,10 @@ export function transformTestData(testObj: ITest) {
     return {
         id: Number(testObj.testing_id),
         TestedPatient: {
+            propertiesMergeConfig: {
+                nodes: true,
+                relationship: true,
+            },
             properties: [
                 {
                     name: testObj.patient_name,

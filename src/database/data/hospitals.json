@@ -1,9 +1,9 @@
 [
     {
-        "hospital_id": "12142728",
+        "hospital_id": "6",
         "patient_name": "Henrietta Cook",
         "patient_mrn": "1def2240-b4e8-11ec-a016-ac87a3187c5f",
-        "patient_status": 2
+        "patient_status": 1
     },
     {
         "hospital_id": "5042276",

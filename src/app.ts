@@ -7,32 +7,37 @@ import { rateLimit } from "express-rate-limit";
 import { createServer } from "http";
 import { Neogma, QueryRunner } from "neogma";
 
+import Logger from "./config/logger";
+import { GRAPH_DATABASE_URL, NODE_ENV, SERVER_PORT } from "./config/config";
+
 export const neogma = new Neogma(
     {
-        url: "bolt://localhost:7687",
+        url: GRAPH_DATABASE_URL,
         username: "neo4j",
         password: "neo4jadminpassword",
     },
     {
-        /* --> (optional) logs every query that Neogma runs, using the given function */
-        logger: console.log,
         /* --> any driver configuration can be used */
         encrypted: false,
     }
 );
 
 export const queryRunner = new QueryRunner({
-    driver: neogma.driver,
-    logger: console.log,
+    driver: neogma.driver
 });
 
-import { NODE_ENV, SERVER_PORT } from "./config/config";
+
 import { getTeam, resetDatabase } from "./controllers/management.controller";
 import { initializeModels, populateData } from "./database/db";
 import {
     getEventContactList,
     getPatientContactList,
 } from "./controllers/tracing.controller";
+import {
+    getAllHospitalStatus,
+    getHospitalStatus,
+} from "./controllers/reporting.controller";
+import Morgan from "./config/morgan";
 
 const main = async () => {
     const app = express();
@@ -49,6 +54,9 @@ const main = async () => {
     // Security Headers
     app.use(helmet());
 
+    // Morgan Logger
+    app.use(Morgan);
+
     // Rate Limiting
     app.use(
         rateLimit({
@@ -59,7 +67,7 @@ const main = async () => {
 
     await initializeModels();
 
-    // await populateData();
+    await populateData();
 
     // Mount Routers
 
@@ -71,6 +79,10 @@ const main = async () => {
     app.route("/api/getconfirmedcontacts/:mrn").get(getPatientContactList);
     app.route("/api/getpossiblecontacts/:mrn").get(getEventContactList);
 
+    // Operational Reporting
+    app.route("/api/getpatientstatus/:hospitalId").get(getHospitalStatus);
+    app.route("/api/getpatientstatus").get(getAllHospitalStatus);
+
     // Health Check Route
     app.get("/ping", (req: Request, res: Response, next: NextFunction) => {
         res.status(200).send("CS505 Database Final Project - Kyle Lastimosa");
@@ -79,13 +91,13 @@ const main = async () => {
     const httpServer = createServer(app);
 
     httpServer.listen(SERVER_PORT, undefined, () => {
-        console.log(
+        Logger.info(
             `Application listening in ${NODE_ENV} mode on port ${SERVER_PORT}`
         );
     });
 
     process.on("unhandledRejection", (err: Error) => {
-        console.log(`Server Unhandled Rejection Error: ${err.message}`);
+        Logger.error(`Server Unhandled Rejection Error: ${err.message}`);
         httpServer.close(() => process.exit(1));
     });
 };
