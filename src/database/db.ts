@@ -35,27 +35,27 @@ export const populateData = async () => {
     ) as IHospital[];
 
     try {
-        console.log("Seeding Vaccination Data");
-        await createManyVaccinationData(vaccinations);
-        console.log("Finished Seeding Vaccination Data");
-    } catch (e) {
-        console.log(`Vaccination Data Seeding Error: ${e}`);
-    }
-
-    try {
-        console.log("Seeding Hospital Data");
-        await createManyHospitalData(hospitals);
-        console.log("Finished Seeding Hospital Data");
-    } catch (e) {
-        console.log(`Hospital Data Seeding Error: ${e}`);
-    }
-
-    try {
-        console.log("Seeding Test Data");
+        console.log("Database: Seeding Test Data");
         await createManyTestData(tests);
-        console.log("Finished Seeding Test Data");
+        console.log("Database: Finished Seeding Test Data");
     } catch (e) {
-        console.log(`Testing Data Seeding Error: ${e}`);
+        console.log(`Database: Testing Data Seeding Error: ${e}`);
+    }
+
+    try {
+        console.log("Database: Seeding Vaccination Data");
+        await createManyVaccinationData(vaccinations);
+        console.log("Database: Finished Seeding Vaccination Data");
+    } catch (e) {
+        console.log(`Database: Vaccination Data Seeding Error: ${e}`);
+    }
+
+    try {
+        console.log("Database: Seeding Hospital Data");
+        await createManyHospitalData(hospitals);
+        console.log("Database: Finished Seeding Hospital Data");
+    } catch (e) {
+        console.log(`Database: Hospital Data Seeding Error: ${e}`);
     }
 
     console.log("Database: Finished populating");

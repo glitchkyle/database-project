@@ -32,7 +32,7 @@ export const resetDatabase = asyncHandler(
             return next(errorHandler(e, res));
         }
 
-        res.status(500).json({
+        res.status(200).json({
             reset_status_code: code,
         });
     }
