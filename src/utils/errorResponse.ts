@@ -1,3 +1,5 @@
+import { ValidationError } from "class-validator";
+
 export class ErrorResponse extends Error {
     statusCode: number;
     data: any[];
@@ -5,5 +7,11 @@ export class ErrorResponse extends Error {
         super(message);
         this.statusCode = statusCode;
         this.data = errors;
+    }
+}
+
+export class ValidationException extends ErrorResponse {
+    constructor(public readonly errors: ValidationError[]) {
+        super("Validation Failed", 400, errors);
     }
 }

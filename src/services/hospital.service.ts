@@ -1,13 +1,9 @@
 import { Hospitals, HospitalsInstance } from "../models/hospital.model";
-import {
-    IHospital,
-    ITest,
-    IVaccination,
-    transformHospitalData,
-    transformTestData,
-    transformVaccinationData,
-} from "../types/incoming.type";
+import { Hospital, IHospitalPayload } from "../types/hospital.type";
+import { ITestPayload, Test } from "../types/test.type";
+import { IVaccinationPayload, Vaccination } from "../types/vaccination.type";
 import { ErrorResponse } from "../utils/errorResponse";
+import { notNull } from "../utils/validator";
 
 export async function findOneHospital({
     id,
@@ -144,28 +140,26 @@ export async function relateToVaccinatedPatient({
     return hospital;
 }
 
-export async function createOneVaccinationData(
-    vaccinationObj: IVaccination
-): Promise<HospitalsInstance> {
-    const createData = transformVaccinationData(vaccinationObj);
+export async function createManyVaccinationData(
+    vaccinationObjs: IVaccinationPayload[]
+): Promise<HospitalsInstance[]> {
+    const vaccinations = vaccinationObjs.map(
+        (vaccinationObj) => new Vaccination(vaccinationObj)
+    );
+
+    let createDatas;
 
     try {
-        const hospital = await Hospitals.createOne(createData, {
-            merge: true,
-            validate: true,
-        });
-        return hospital;
+        createDatas = (
+            await Promise.all(
+                vaccinations.map(async (vaccination) => {
+                    return await vaccination.toGraphQuery();
+                })
+            )
+        ).filter(notNull);
     } catch (e) {
         throw e;
     }
-}
-
-export async function createManyVaccinationData(
-    vaccinations: IVaccination[]
-): Promise<HospitalsInstance[]> {
-    const createDatas = vaccinations.map((vaccinationObj) =>
-        transformVaccinationData(vaccinationObj)
-    );
 
     try {
         const hospitals = await Hospitals.createMany(createDatas, {
@@ -173,33 +167,31 @@ export async function createManyVaccinationData(
             validate: true,
         });
         return hospitals;
-    } catch (e) {
-        throw e;
-    }
-}
-
-export async function createOneHospitalData(
-    hospitalObj: IHospital
-): Promise<HospitalsInstance> {
-    const createData = transformHospitalData(hospitalObj);
-
-    try {
-        const hospital = await Hospitals.createOne(createData, {
-            merge: true,
-            validate: true,
-        });
-        return hospital;
     } catch (e) {
         throw e;
     }
 }
 
 export async function createManyHospitalData(
-    hospitals: IHospital[]
+    hospitalObjs: IHospitalPayload[]
 ): Promise<HospitalsInstance[]> {
-    const createDatas = hospitals.map((hospitalObj) =>
-        transformHospitalData(hospitalObj)
+    const hospitals = hospitalObjs.map(
+        (hospitalObj) => new Hospital(hospitalObj)
     );
+
+    let createDatas;
+
+    try {
+        createDatas = (
+            await Promise.all(
+                hospitals.map(async (hospital) => {
+                    return await hospital.toGraphQuery();
+                })
+            )
+        ).filter(notNull);
+    } catch (e) {
+        throw e;
+    }
 
     try {
         const hospitals = await Hospitals.createMany(createDatas, {
@@ -212,26 +204,24 @@ export async function createManyHospitalData(
     }
 }
 
-export async function createOneTestData(
-    testObj: ITest
-): Promise<HospitalsInstance> {
-    const createData = transformTestData(testObj);
+export async function createManyTestData(
+    testObjs: ITestPayload[]
+): Promise<HospitalsInstance[]> {
+    const tests = testObjs.map((testObj) => new Test(testObj));
+
+    let createDatas;
 
     try {
-        const hospital = await Hospitals.createOne(createData, {
-            merge: true,
-            validate: true,
-        });
-        return hospital;
+        createDatas = (
+            await Promise.all(
+                tests.map(async (test) => {
+                    return await test.toGraphQuery();
+                })
+            )
+        ).filter(notNull);
     } catch (e) {
         throw e;
     }
-}
-
-export async function createManyTestData(
-    tests: ITest[]
-): Promise<HospitalsInstance[]> {
-    const createDatas = tests.map((testObj) => transformTestData(testObj));
 
     try {
         const hospitals = await Hospitals.createMany(createDatas, {

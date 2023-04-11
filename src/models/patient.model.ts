@@ -38,7 +38,7 @@ export const Patients = ModelFactory<
                 required: false,
             },
             mrn: { type: "string", minLength: 1, required: true },
-            zipcode: { type: "number", minimum: 0, required: false },
+            zipcode: { type: "string", minLength: 1, required: false },
         },
         relationships: {
             AttendedEvent: {

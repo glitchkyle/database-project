@@ -12,3 +12,5 @@ export const TEAM_NAME = process.env.TEAM_NAME || "Me, Myself, and I";
 
 export const GRAPH_DATABASE_URL =
     process.env.GRAPH_DATABASE_URL || "bolt://localhost:7474";
+
+export const MESSAGE_QUEUE_URL = process.env.MESSAGE_QUEUE_URL;

@@ -23,12 +23,11 @@ export const neogma = new Neogma(
 );
 
 export const queryRunner = new QueryRunner({
-    driver: neogma.driver
+    driver: neogma.driver,
 });
 
-
 import { getTeam, resetDatabase } from "./controllers/management.controller";
-import { initializeModels, populateData } from "./database/db";
+import { populateData } from "./database/db";
 import {
     getEventContactList,
     getPatientContactList,
@@ -38,9 +37,12 @@ import {
     getHospitalStatus,
 } from "./controllers/reporting.controller";
 import Morgan from "./config/morgan";
+import { initializeMessageQueue } from "./config/queue";
 
 const main = async () => {
     const app = express();
+
+    // Configure Express application
 
     // Enable CORS
     app.use(cors());
@@ -65,9 +67,23 @@ const main = async () => {
         })
     );
 
-    await initializeModels();
+    // Configure database
 
-    await populateData();
+    try {
+        await populateData();
+    } catch (e) {
+        Logger.error(e);
+        return;
+    }
+
+    // Configure message queue
+
+    try{
+        await initializeMessageQueue();
+    } catch (e) {
+        Logger.error(e);
+        return;
+    }
 
     // Mount Routers
 

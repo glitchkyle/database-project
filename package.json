@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "amqplib": "^0.10.3",
+    "class-validator": "^0.14.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
@@ -21,6 +23,7 @@
   "main": "src/app.ts",
   "license": "MIT",
   "devDependencies": {
+    "@types/amqplib": "^0.10.1",
     "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.15",
