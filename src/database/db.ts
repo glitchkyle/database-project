@@ -21,14 +21,6 @@ export const populateData = async () => {
     Logger.info("Database: Populating database");
 
     try {
-        Logger.info("Database: Seeding Test Data");
-        await loadTestData(createManyTestData);
-        Logger.info("Database: Finished Seeding Test Data");
-    } catch (e) {
-        Logger.info(`Database: Testing Data Seeding Error: ${e}`);
-    }
-
-    try {
         Logger.info("Database: Seeding Vaccination Data");
         await loadVaccinationData(createManyVaccinationData);
         Logger.info("Database: Finished Seeding Vaccination Data");
@@ -42,6 +34,14 @@ export const populateData = async () => {
         Logger.info("Database: Finished Seeding Hospital Data");
     } catch (e) {
         Logger.info(`Database: Hospital Data Seeding Error: ${e}`);
+    }
+
+    try {
+        Logger.info("Database: Seeding Test Data");
+        await loadTestData(createManyTestData);
+        Logger.info("Database: Finished Seeding Test Data");
+    } catch (e) {
+        Logger.info(`Database: Testing Data Seeding Error: ${e}`);
     }
 
     Logger.info("Database: Finished populating");
