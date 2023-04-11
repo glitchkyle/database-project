@@ -8,13 +8,19 @@ import { createServer } from "http";
 import { Neogma, QueryRunner } from "neogma";
 
 import Logger from "./config/logger";
-import { GRAPH_DATABASE_URL, NODE_ENV, SERVER_PORT } from "./config/config";
+import {
+    GRAPH_DATABASE_PASSWORD,
+    GRAPH_DATABASE_URL,
+    GRAPH_DATABASE_USERNAME,
+    NODE_ENV,
+    SERVER_PORT,
+} from "./config/config";
 
 export const neogma = new Neogma(
     {
         url: GRAPH_DATABASE_URL,
-        username: "neo4j",
-        password: "neo4jadminpassword",
+        username: GRAPH_DATABASE_USERNAME,
+        password: GRAPH_DATABASE_PASSWORD,
     },
     {
         /* --> any driver configuration can be used */
@@ -39,83 +45,73 @@ import {
 import Morgan from "./config/morgan";
 import { initializeMessageQueue } from "./config/queue";
 
-const main = async () => {
-    const app = express();
+const app = express();
 
-    // Configure Express application
+// Configure Express application
 
-    // Enable CORS
-    app.use(cors());
+// Enable CORS
+app.use(cors());
 
-    // Body Parser
-    app.use(express.json());
+// Body Parser
+app.use(express.json());
 
-    // Cookie Parser
-    app.use(cookieParser());
+// Cookie Parser
+app.use(cookieParser());
 
-    // Security Headers
-    app.use(helmet());
+// Security Headers
+app.use(helmet());
 
-    // Morgan Logger
+// Morgan Logger
+if (NODE_ENV !== "testing") {
     app.use(Morgan);
+}
 
-    // Rate Limiting
-    app.use(
-        rateLimit({
-            windowMs: 10 * 60 * 1000,
-            max: 500,
-        })
+// Rate Limiting
+app.use(
+    rateLimit({
+        windowMs: 10 * 60 * 1000,
+        max: 500,
+    })
+);
+
+// Configure database
+populateData().catch((e) => {
+    Logger.error(e);
+});
+
+// Configure message queue
+initializeMessageQueue().catch((e) => {
+    Logger.error(e);
+});
+
+// Mount Routers
+
+// Management Functions
+app.route("/api/getteam").get(getTeam);
+app.route("/api/reset").get(resetDatabase);
+
+// Contact Tracing
+app.route("/api/getconfirmedcontacts/:mrn").get(getPatientContactList);
+app.route("/api/getpossiblecontacts/:mrn").get(getEventContactList);
+
+// Operational Reporting
+app.route("/api/getpatientstatus/:hospitalId").get(getHospitalStatus);
+app.route("/api/getpatientstatus").get(getAllHospitalStatus);
+
+// Health Check Route
+app.get("/ping", (req: Request, res: Response, next: NextFunction) => {
+    res.status(200).send("CS505 Database Final Project - Kyle Lastimosa");
+});
+
+export const httpServer = createServer(app);
+
+httpServer.listen(SERVER_PORT, undefined, () => {
+    Logger.info(
+        `Application listening in ${NODE_ENV} mode on port ${SERVER_PORT}`
     );
+});
 
-    // Configure database
-
-    try {
-        await populateData();
-    } catch (e) {
-        Logger.error(e);
-        return;
-    }
-
-    // Configure message queue
-
-    try{
-        await initializeMessageQueue();
-    } catch (e) {
-        Logger.error(e);
-        return;
-    }
-
-    // Mount Routers
-
-    // Management Functions
-    app.route("/api/getteam").get(getTeam);
-    app.route("/api/reset").get(resetDatabase);
-
-    // Contact Tracing
-    app.route("/api/getconfirmedcontacts/:mrn").get(getPatientContactList);
-    app.route("/api/getpossiblecontacts/:mrn").get(getEventContactList);
-
-    // Operational Reporting
-    app.route("/api/getpatientstatus/:hospitalId").get(getHospitalStatus);
-    app.route("/api/getpatientstatus").get(getAllHospitalStatus);
-
-    // Health Check Route
-    app.get("/ping", (req: Request, res: Response, next: NextFunction) => {
-        res.status(200).send("CS505 Database Final Project - Kyle Lastimosa");
-    });
-
-    const httpServer = createServer(app);
-
-    httpServer.listen(SERVER_PORT, undefined, () => {
-        Logger.info(
-            `Application listening in ${NODE_ENV} mode on port ${SERVER_PORT}`
-        );
-    });
-
-    process.on("unhandledRejection", (err: Error) => {
-        Logger.error(`Server Unhandled Rejection Error: ${err.message}`);
-        httpServer.close(() => process.exit(1));
-    });
-};
-
-main();
+process.on("unhandledRejection", (err: Error) => {
+    Logger.error(`Server Unhandled Rejection Error: ${err.message}`);
+    httpServer.close(() => process.exit(1));
+});
