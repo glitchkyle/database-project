@@ -24,16 +24,17 @@ export const getTeam = asyncHandler(
 // @access  Public
 export const resetDatabase = asyncHandler(
     async (req: Request<{}, {}, {}, {}>, res: Response, next: NextFunction) => {
-        const code: number = 1;
+        const code = 1;
 
         try {
             await queryRunner.delete({ detach: true });
+            res.status(200).json({
+                reset_status_code: 1,
+            });
         } catch (e) {
-            return next(errorHandler(e, res));
-        }
-
-        res.status(200).json({
-            reset_status_code: code,
-        });
+            res.status(500).json({
+                reset_status_code: 0,
+            });
+        }        
     }
 );
