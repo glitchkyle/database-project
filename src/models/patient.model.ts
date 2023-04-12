@@ -50,7 +50,7 @@ export const Patients = ModelFactory<
                 model: "self",
                 direction: "out",
                 name: "CONTACTED",
-            }
+            },
         },
     },
     neogma

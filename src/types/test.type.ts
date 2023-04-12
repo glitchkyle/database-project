@@ -1,12 +1,4 @@
-import {
-    IsNotEmpty,
-    IsNumber,
-    IsNumberString,
-    IsPositive,
-    IsString,
-    Validate,
-    validate,
-} from "class-validator";
+import { IsNotEmpty, IsString, Validate, validate } from "class-validator";
 
 import { ValidateNumericString, ValidateStringArray } from "../utils/validator";
 import Logger from "../config/logger";
