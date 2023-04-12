@@ -1,10 +1,8 @@
 import { Response } from "express";
 
-import { ErrorResponse } from "../utils/errorResponse";
-
 // eslint-disable-next-line
 export const errorHandler = (e: any, res: Response) => {
-    let error = { ...e };
+    const error = { ...e };
 
     error.message = e?.message;
 

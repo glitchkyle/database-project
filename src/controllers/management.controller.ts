@@ -3,7 +3,6 @@ import { Request, Response, NextFunction } from "express";
 import { asyncHandler } from "../middlewares/async";
 import { APP_STATUS_CODE, TEAM_NAME } from "../config/config";
 import { TEAM_MEMBER_SIDS } from "../config/constants";
-import { errorHandler } from "../handlers/error.handler";
 import { queryRunner } from "../app";
 
 // @desc    Gets team name
@@ -24,8 +23,6 @@ export const getTeam = asyncHandler(
 // @access  Public
 export const resetDatabase = asyncHandler(
     async (req: Request<{}, {}, {}, {}>, res: Response, next: NextFunction) => {
-        const code = 1;
-
         try {
             await queryRunner.delete({ detach: true });
             res.status(200).json({
@@ -35,6 +32,6 @@ export const resetDatabase = asyncHandler(
             res.status(500).json({
                 reset_status_code: 0,
             });
-        }        
+        }
     }
 );
