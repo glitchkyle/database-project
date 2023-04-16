@@ -39,8 +39,10 @@ import {
     getPatientContactList,
 } from "./controllers/tracing.controller";
 import {
+    getAlertList,
     getAllHospitalStatus,
     getHospitalStatus,
+    getZipAlertList,
 } from "./controllers/reporting.controller";
 import Morgan from "./config/morgan";
 import { initializeMessageQueue } from "./config/queue";
@@ -89,6 +91,9 @@ initializeMessageQueue().catch((e) => {
 // Management Functions
 app.route("/api/getteam").get(getTeam);
 app.route("/api/reset").get(resetDatabase);
+
+app.route("/api/alertlist").get(getAlertList);
+app.route("/api/zipalertlist").get(getZipAlertList);
 
 // Contact Tracing
 app.route("/api/getconfirmedcontacts/:mrn").get(getPatientContactList);

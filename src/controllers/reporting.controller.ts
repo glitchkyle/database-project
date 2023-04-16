@@ -18,7 +18,23 @@ export const getZipAlertList = asyncHandler(
         req: Request<{}, {}, {}, {}>,
         res: Response,
         next: NextFunction
-    ) => {}
+    ) => {
+        //var arr: Number[] = []
+        var { zipList } = require('../config/queue.ts');
+        if(zipList != null){
+            if(zipList.length > 0){
+                res.status(200).json({
+                    "ziplist": zipList,
+                });
+            }
+            else{
+                console.log("Working")
+                res.status(200).json({
+                    "ziplist": "None",
+                });
+            }
+        }   
+    }
 );
 
 // @desc    API alert on statewide when at least five zipcodes are in alert state within 15 second window
@@ -29,7 +45,18 @@ export const getAlertList = asyncHandler(
         req: Request<{}, {}, {}, {}>,
         res: Response,
         next: NextFunction
-    ) => {}
+    ) => {
+        let stateStatus = 0;
+        var now = new Date();
+        var {count} = require('../config/queue.ts');
+        if(count >= 5){
+            stateStatus = 1;
+        }
+
+        res.status(200).json({
+            "state_status": stateStatus,
+        });
+    }
 );
 
 // @desc    API to provide summarized patient status per hospital
