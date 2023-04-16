@@ -21,10 +21,6 @@ export const neogma = new Neogma(
         url: GRAPH_DATABASE_URL,
         username: GRAPH_DATABASE_USERNAME,
         password: GRAPH_DATABASE_PASSWORD,
-    },
-    {
-        /* --> any driver configuration can be used */
-        encrypted: false,
     }
 );
 

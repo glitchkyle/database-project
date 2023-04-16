@@ -11,7 +11,7 @@ export const SERVER_PORT = process.env.SERVER_PORT || "8080";
 export const TEAM_NAME = process.env.TEAM_NAME || "Me, Myself, and I";
 
 export const GRAPH_DATABASE_URL =
-    process.env.GRAPH_DATABASE_URL || "bolt://localhost:7474";
+    process.env.GRAPH_DATABASE_URL || "bolt://localhost:7687";
 
 export const GRAPH_DATABASE_USERNAME =
     process.env.GRAPH_DATABASE_USERNAME || "USERNAME";
