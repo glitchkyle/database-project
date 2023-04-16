@@ -16,13 +16,11 @@ import {
     SERVER_PORT,
 } from "./config/config";
 
-export const neogma = new Neogma(
-    {
-        url: GRAPH_DATABASE_URL,
-        username: GRAPH_DATABASE_USERNAME,
-        password: GRAPH_DATABASE_PASSWORD,
-    }
-);
+export const neogma = new Neogma({
+    url: GRAPH_DATABASE_URL,
+    username: GRAPH_DATABASE_USERNAME,
+    password: GRAPH_DATABASE_PASSWORD,
+});
 
 export const queryRunner = new QueryRunner({
     driver: neogma.driver,
@@ -70,7 +68,8 @@ app.use(
     })
 );
 
-// Configure database
+if(NODE_ENV !== "testing"){
+    // Configure database
 populateData().catch((e) => {
     Logger.error(e);
 });
@@ -79,6 +78,8 @@ populateData().catch((e) => {
 initializeMessageQueue().catch((e) => {
     Logger.error(e);
 });
+}
+
 
 // Mount Routers
 
