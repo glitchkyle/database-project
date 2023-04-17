@@ -8,6 +8,8 @@ import { createManyTestData, createManyVaccinationData } from "../services/hospi
 import { IHospitalPayload } from "../types/hospital.type";
 import { createManyHospitalData } from "../services/hospital.service";
 import { ITestPayload } from "../types/test.type";
+import { ValidateNumericString } from "../utils/validator";
+import { Validate } from "class-validator";
 
 async function initializeVaccinationQueue(conn: Connection) {
     const exchangeName = "vax_list";
@@ -96,15 +98,22 @@ async function initializePatientQueue(conn: Connection) {
                     //this is so scuffed
                     //making a map of the new message
                     for(let i = 0; i < testPayload.length; i++){
-                        if(Number(testPayload[i]["patient_status"]) == 1){
-                            if(!newZipMap.has(Number(testPayload[i]["patient_zipcode"]))){
-                                newZipMap.set(Number(testPayload[i]["patient_zipcode"]), 1)
+                        
+                        //validating input
+                        if(ValidateNumericString.isValidNumericString(testPayload[i]["patient_zipcode"])
+                            && ValidateNumericString.isValidNumericString(testPayload[i]["patient_status"]))
+                            {
+                                if(Number(testPayload[i]["patient_status"]) == 1){
+                                    if(!newZipMap.has(Number(testPayload[i]["patient_zipcode"]))){
+                                        newZipMap.set(Number(testPayload[i]["patient_zipcode"]), 1)
+                                    }
+                                    else{
+                                        var n = Number(newZipMap.get(Number(testPayload[i]["patient_zipcode"])))
+                                        newZipMap.set(Number(testPayload[i]["patient_zipcode"]), n+1)
+                                    }
+                                }
                             }
-                            else{
-                                var n = Number(newZipMap.get(Number(testPayload[i]["patient_zipcode"])))
-                                newZipMap.set(Number(testPayload[i]["patient_zipcode"]), n+1)
-                            }
-                        }
+                        
                     }
                     //now we have a map where the KEY is a zipcode that appears in the current message, and
                     //the VALUE indicates how many times that zipcode appears in the current message with a positive test case
@@ -139,7 +148,7 @@ async function initializePatientQueue(conn: Connection) {
                     //This might be very poor JavaScript but this is where the variables are exported directly to the controllers
                     then = now;
                     module.exports = {count, zipList}
-                    //add to graph database
+                    //add to graph
                     createManyTestData(testPayload)
                 }
             }
