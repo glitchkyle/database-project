@@ -16,13 +16,11 @@ import {
     SERVER_PORT,
 } from "./config/config";
 
-export const neogma = new Neogma(
-    {
-        url: GRAPH_DATABASE_URL,
-        username: GRAPH_DATABASE_USERNAME,
-        password: GRAPH_DATABASE_PASSWORD,
-    }
-);
+export const neogma = new Neogma({
+    url: GRAPH_DATABASE_URL,
+    username: GRAPH_DATABASE_USERNAME,
+    password: GRAPH_DATABASE_PASSWORD,
+});
 
 export const queryRunner = new QueryRunner({
     driver: neogma.driver,
