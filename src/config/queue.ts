@@ -93,7 +93,7 @@ async function initializePatientQueue(conn: Connection) {
                     //TODO: Preprocess and load to database
                     var newZipMap = new Map<Number, Number>();
                     zipList = [];
-                    var now = new Date()
+                    const now = new Date()
                     //this is so scuffed
                     //making a map of the new message
                     for(let i = 0; i < testPayload.length; i++){
@@ -127,8 +127,6 @@ async function initializePatientQueue(conn: Connection) {
                     }
                     then = now;
                     module.exports = {count, zipList}
-                    //can record time stamp and length of ziplist as a pair to be queried later?
-                    //createManyTestData(testPayload)
                 }
             }
         });
