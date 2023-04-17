@@ -59,7 +59,6 @@ async function initializePatientQueue(conn: Connection) {
     var alertMap = new Map<Number, Number>();
     var zipList: Number[] = [];
     var then = new Date()
-    var testInt = 2;
 
     try {
         channel = await conn.createChannel();
@@ -107,26 +106,41 @@ async function initializePatientQueue(conn: Connection) {
                             }
                         }
                     }
+                    //now we have a map where the KEY is a zipcode that appears in the current message, and
+                    //the VALUE indicates how many times that zipcode appears in the current message with a positive test case
+
                     //compare to old map
+                    //the old map is where we stored the zipcode->count map from the last message. Empty at first.
                     for(var key in newZipMap.keys){
+                        //comparing zipcode positive-case counts. If a zipcode has twice as many positive cases as it did in the
+                        //last message, we push that zipcode to an Alert list.
+                        //This means that the zipcode must appear in both messages.
                         if(oldZipMap.has(Number(key))){
                             if(Number(oldZipMap.get(Number(key))) * 2 <= Number(newZipMap.get(Number(key)))){
                                 zipList.push(Number(key))
                             }
                         }
                     }
+                    //The current message becomes the last message that we will use for comparison next time.
                     oldZipMap = newZipMap;
+                    //The zipcodes in zipList have to be timestamped, so we map zipcode->timestamp.
+                    //Even if this overwrites an older zipcode entry, it's okay, because we aren't counting the same zipcode twice
+                    //when checking for the statewide alert.
                     for(var z in zipList){
                         alertMap.set(Number(zipList[z]), now.getTime());
                     }
+                    //Counting the entries in the alertMap whose timestamps were less than 15000 ms ago
                     let count = 0;
                     for(const key of alertMap.keys()){
                         if(now.getTime() - Number(alertMap.get(key)) < 15000){
                             count++;
                         }   
                     }
+                    //This might be very poor JavaScript but this is where the variables are exported directly to the controllers
                     then = now;
                     module.exports = {count, zipList}
+                    //add to graph database
+                    createManyTestData(testPayload)
                 }
             }
         });

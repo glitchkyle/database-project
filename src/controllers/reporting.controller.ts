@@ -21,7 +21,7 @@ export const getZipAlertList = asyncHandler(
     ) => {
         //var arr: Number[] = []
         var { zipList } = require('../config/queue.ts');
-        if(zipList != null){
+        /*if(zipList != null){
             if(zipList.length > 0){
                 res.status(200).json({
                     "ziplist": zipList,
@@ -33,7 +33,10 @@ export const getZipAlertList = asyncHandler(
                     "ziplist": "None",
                 });
             }
-        }   
+        }*/
+        res.status(200).json({
+            "ziplist": zipList,
+        })   
     }
 );
 
@@ -47,7 +50,6 @@ export const getAlertList = asyncHandler(
         next: NextFunction
     ) => {
         let stateStatus = 0;
-        var now = new Date();
         var {count} = require('../config/queue.ts');
         if(count >= 5){
             stateStatus = 1;
