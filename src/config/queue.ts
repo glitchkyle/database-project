@@ -117,9 +117,13 @@ async function initializePatientQueue(conn: Connection) {
                     //now we have a map where the KEY is a zipcode that appears in the current message, and
                     //the VALUE indicates how many times that zipcode appears in the current message with a positive test case
 
+                    //console.log(oldZipMap)
+                    //console.log(newZipMap)
                     //compare to old map
+                    const keys = newZipMap.keys()
                     //the old map is where we stored the zipcode->count map from the last message. Empty at first.
-                    for(var key in newZipMap.keys){
+                    for(let n = 0; n < newZipMap.size; n++){
+                        const key = keys.next().value
                         //comparing zipcode positive-case counts. If a zipcode has twice as many positive cases as it did in the
                         //last message, we push that zipcode to an Alert list.
                         //This means that the zipcode must appear in both messages.
