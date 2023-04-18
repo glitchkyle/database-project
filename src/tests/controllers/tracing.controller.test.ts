@@ -7,6 +7,8 @@ import _ from "lodash";
 
 chai.use(chaiHTTP);
 
+// TODO: Create more demo data
+
 describe("Tracing Controller", async () => {
     describe("GET /api/getconfirmedcontacts/:mrn", async () => {
         context(
