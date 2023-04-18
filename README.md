@@ -13,8 +13,14 @@
 
 1. Clone the latest version of the repository `git clone https://github.com/glitchkyle/database-project.git`
 2. Navigate to the repository `cd database-project`
-3. Create an environment variable file `.env` in the root directory using `touch .env`.
+3. Create an environment variable file `.env` in the root directory using `touch .env`
 4. Copy the latest environment variables on to the `.env`
 5. Install the latest dependencies `npm install` or `sudo npm install`
 6. Start the development container `docker-compose up`
 7. Code away!
+
+## Testing
+
+Run the command `npm run test` and expect to have all tests pass
+
+The tests are based on the demo data in `src/database/data`

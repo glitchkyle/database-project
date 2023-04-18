@@ -68,7 +68,8 @@ app.use(
     })
 );
 
-// Configure database
+if(NODE_ENV !== "testing"){
+    // Configure database
 populateData().catch((e) => {
     Logger.error(e);
 });
@@ -77,6 +78,8 @@ populateData().catch((e) => {
 initializeMessageQueue().catch((e) => {
     Logger.error(e);
 });
+}
+
 
 // Mount Routers
 

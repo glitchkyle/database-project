@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
+import { QueryBuilder } from "neogma";
 
 import { asyncHandler } from "../middlewares/async";
 import { errorHandler } from "../handlers/error.handler";
-import { QueryBuilder } from "neogma";
 import { queryRunner } from "../app";
 import { Patients } from "../models/patient.model";
 import { Events } from "../models/event.model";
