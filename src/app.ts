@@ -70,18 +70,17 @@ app.use(
     })
 );
 
-if(NODE_ENV !== "testing"){
+if (NODE_ENV !== "testing") {
     // Configure database
-populateData().catch((e) => {
-    Logger.error(e);
-});
+    populateData().catch((e) => {
+        Logger.error(e);
+    });
 
-// Configure message queue
-initializeMessageQueue().catch((e) => {
-    Logger.error(e);
-});
+    // Configure message queue
+    initializeMessageQueue().catch((e) => {
+        Logger.error(e);
+    });
 }
-
 
 // Mount Routers
 
