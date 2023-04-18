@@ -60,7 +60,6 @@ async function initializePatientQueue(conn: Connection) {
     var oldZipMap = new Map<Number, Number>();
     var alertMap = new Map<Number, Number>();
     var zipList: Number[] = [];
-    var then = new Date()
 
     try {
         channel = await conn.createChannel();
@@ -146,7 +145,6 @@ async function initializePatientQueue(conn: Connection) {
                         }   
                     }
                     //This might be very poor JavaScript but this is where the variables are exported directly to the controllers
-                    then = now;
                     module.exports = {count, zipList}
                     //add to graph
                     createManyTestData(testPayload)
