@@ -14,15 +14,11 @@ import {
 // @route   GET /api/zipalertlist
 // @access  Public
 export const getZipAlertList = asyncHandler(
-    async (
-        req: Request<{}, {}, {}, {}>,
-        res: Response,
-        next: NextFunction
-    ) => {
-        var { zipList } = require('../config/queue.ts');
+    async (req: Request<{}, {}, {}, {}>, res: Response, next: NextFunction) => {
+        const { zipList } = require("../config/queue.ts");
         res.status(200).json({
-            "ziplist": zipList,
-        })   
+            ziplist: zipList,
+        });
     }
 );
 
@@ -30,19 +26,15 @@ export const getZipAlertList = asyncHandler(
 // @route   GET /api/alertlist
 // @access  Public
 export const getAlertList = asyncHandler(
-    async (
-        req: Request<{}, {}, {}, {}>,
-        res: Response,
-        next: NextFunction
-    ) => {
+    async (req: Request<{}, {}, {}, {}>, res: Response, next: NextFunction) => {
         let stateStatus = 0;
-        var {count} = require('../config/queue.ts');
-        if(count >= 5){
+        const { count } = require("../config/queue.ts");
+        if (count >= 5) {
             stateStatus = 1;
         }
 
         res.status(200).json({
-            "state_status": stateStatus,
+            state_status: stateStatus,
         });
     }
 );
