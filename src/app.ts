@@ -113,6 +113,8 @@ httpServer.listen(SERVER_PORT, undefined, () => {
 });
 
 process.on("unhandledRejection", (err: Error) => {
-    Logger.error(`Server Unhandled Rejection Error: ${err.message}`);
+    Logger.error(
+        `Server Unhandled Rejection Error: ${err.name} -- ${err.message}`
+    );
     httpServer.close(() => process.exit(1));
 });

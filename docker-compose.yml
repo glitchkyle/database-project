@@ -7,6 +7,10 @@ services:
     restart: always
     env_file:
       - .env
+    environment:
+      - GRAPH_DATABASE_URL=bolt://graph-database:7687
+      - GRAPH_DATABASE_USERNAME=neo4j
+      - GRAPH_DATABASE_PASSWORD=neo4jadminpassword
     ports:
       - "8080:8080"
     depends_on:
