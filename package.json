@@ -56,6 +56,6 @@
     "build": "tsc",
     "test": "NODE_ENV=testing SERVER_PORT=8100 ts-mocha src/tests/**/*.test.ts --exit",
     "lint": "eslint '**/*.ts'",
-    "prettify": "prettier '**/*.ts' --write"
+    "format": "prettier '**/*.ts' --write"
   }
 }

@@ -30,8 +30,8 @@ describe("Reporting Controller", async () => {
         it("Should return valid icu-patient_count", async () => {
             expect(res.body["icu-patient_count"]).to.exist;
         });
-        it("Should return valid icu_patient_vax", async () => {
-            expect(res.body["icu_patient_vax"]).to.exist;
+        it("Should return valid icu-patient_vax", async () => {
+            expect(res.body["icu-patient_vax"]).to.exist;
         });
         it("Should return valid patient_vent_count", async () => {
             expect(res.body["patient_vent_count"]).to.exist;
@@ -57,8 +57,8 @@ describe("Reporting Controller", async () => {
         it("Should return valid icu-patient_count", async () => {
             expect(res.body["icu-patient_count"]).to.exist;
         });
-        it("Should return valid icu_patient_vax", async () => {
-            expect(res.body["icu_patient_vax"]).to.exist;
+        it("Should return valid icu-patient_vax", async () => {
+            expect(res.body["icu-patient_vax"]).to.exist;
         });
         it("Should return valid patient_vent_count", async () => {
             expect(res.body["patient_vent_count"]).to.exist;
