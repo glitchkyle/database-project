@@ -159,7 +159,7 @@ export const getHospitalStatus = asyncHandler(
             "in-patient_count": inPatient,
             "in-patient_vax": inPatientVax,
             "icu-patient_count": icuPatient,
-            icu_patient_vax: icuPatientVax,
+            "icu-patient_vax": icuPatientVax,
             patient_vent_count: ventPatient,
             patient_vent_vax: ventPatientVax,
         });
@@ -256,7 +256,7 @@ export const getAllHospitalStatus = asyncHandler(
             "in-patient_count": inPatient,
             "in-patient_vax": inPatientVax,
             "icu-patient_count": icuPatient,
-            icu_patient_vax: icuPatientVax,
+            "icu-patient_vax": icuPatientVax,
             patient_vent_count: ventPatient,
             patient_vent_vax: ventPatientVax,
         });
