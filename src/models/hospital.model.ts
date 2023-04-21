@@ -38,7 +38,6 @@ export const Hospitals = ModelFactory<
         schema: {
             id: {
                 type: "number",
-                minimum: 1,
                 required: true,
             },
         },
